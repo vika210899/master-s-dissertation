@@ -1,6 +1,5 @@
 from textblob import TextBlob
 from sklearn.feature_extraction.text import CountVectorizer
-from pattern.ru import ngrams
 import textacy
 from spacy.lang.ru import Russian
 import time
@@ -14,7 +13,7 @@ text1 = u'Пушкин неоднократно писал о своей род�
 start_bigrams = time.time()
 bigrm = list(bigrams(ToktokTokenizer().tokenize(text1)))
 result = [' '.join(bigrmmmm) for bigrmmmm in bigrm]
-# print(result)
+print(result)
 result
 print(time.time() - start_bigrams, ' - NLTK Bigrams')
 
@@ -44,15 +43,16 @@ doc = nlp("Пушкин неоднократно писал о своей род
 # ---2---
 start_spacy2 = time.time()
 ngrams = list(textacy.extract.ngrams(doc, 2))
-# print(ngrams)
+print(ngrams)
 print(time.time() - start_spacy2, ' - SpaCy')
 
 
-# Pattern
-start_pattern = time.time()
-result = ngrams(text, n=2)
-# print(result)
-print(time.time() - start_pattern, ' - Pattern')
+# # Pattern
+# from pattern.ru import ngrams
+# start_pattern = time.time()
+# result = ngrams(text, n=2)
+# # print(result)
+# print(time.time() - start_pattern, ' - Pattern')
 
 
 # Gensim
@@ -87,5 +87,5 @@ print(time.time() - start_scikitlearn, ' - Scikit-learn')
 start_textblob = time.time()
 n_grams = list(TextBlob(text).ngrams(2))
 result = [' '.join(grams) for grams in n_grams]
-# print(result)
+print(result)
 print(time.time() - start_textblob, ' - TextBlob')

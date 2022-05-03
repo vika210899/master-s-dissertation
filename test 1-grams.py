@@ -13,132 +13,139 @@ from nltk.tokenize import SpaceTokenizer
 from nltk.tokenize import WhitespaceTokenizer
 from nltk.tokenize import RegexpTokenizer
 import time
-text = 'Я - к.т.н., живу в США.'
+text = 'Пушкин неоднократно писал о своей родословной в стихах и прозе; он видел в своих предках образец истинной «аристократии», древнего рода, честно служившего отечеству, но не снискавшего благосклонности правителей и «гонимого». А кровать-то не диван.'
+text1 = u'Пушкин неоднократно писал о своей родословной в стихах и прозе; он видел в своих предках образец истинной «аристократии», древнего рода, честно служившего отечеству, но не снискавшего благосклонности правителей и «гонимого». А кровать-то не диван.'
+text33 = ["Пушкин неоднократно писал о своей родословной в стихах и прозе; он видел в своих предках образец истинной «аристократии», древнего рода, честно служившего отечеству, но не снискавшего благосклонности правителей и «гонимого». А кровать-то не диван."]
 # 'Не ветер, а какой-то ураган!'
 # 'Я-то из-за угла вышел.'
 # 'Я - к.т.н., живу в США.'
 # 'В Нью-Йорке (США) хорошие маффины стоят $3.88.'
 
 
-# RegexpTokenizer
-start_time1 = time.time()
-# ['Не', 'ветер', ',', 'а', 'какой-то', 'ураган', '!']
-tokenizer = RegexpTokenizer('\w+-\w+|\w+|[^\s+]')
-# tokenizer = RegexpTokenizer('\s+', gaps = True)  # ['Не', 'ветер,', 'а', 'какой-то', 'ураган!']
-# tokenizer = RegexpTokenizer('\w+')  # ['Не', 'ветер', 'а', 'какой', 'то', 'ураган']
-print(tokenizer.tokenize(text), ', ', time.time() -
-      start_time1, ' - RegexpTokenizer')
+# # RegexpTokenizer
+# start_RegexpTokenizer = time.time()
+# tokenizer = RegexpTokenizer('\w+-\w+|\w+|[^\s+]')
+# # tokenizer = RegexpTokenizer('\s+', gaps = True)  # ['Не', 'ветер,', 'а', 'какой-то', 'ураган!']
+# # tokenizer = RegexpTokenizer('\w+')  # ['Не', 'ветер', 'а', 'какой', 'то', 'ураган']
+# result_RegexpTokenizer = tokenizer.tokenize(text)
+# # print(result_RegexpTokenizer)  # ['Не', 'ветер', ',', 'а', 'какой-то', 'ураган', '!']
+# print(time.time() - start_RegexpTokenizer, ' - RegexpTokenizer')
 
 
-# WhitespaceTokenizer
-start_time2 = time.time()
-print(WhitespaceTokenizer().tokenize(text), ', ', time.time() - start_time2,
-      ' - WhitespaceTokenizer')  # ['Не', 'ветер,', 'а', 'какой-то', 'ураган!']
+# # WhitespaceTokenizer
+# start_WhitespaceTokenizer = time.time()
+# result_WhitespaceTokenizer = WhitespaceTokenizer().tokenize(text)
+# # print(result_WhitespaceTokenizer)  # ['Не', 'ветер,', 'а', 'какой-то', 'ураган!']
+# print(time.time() - start_WhitespaceTokenizer, ' - WhitespaceTokenizer')
 
 
-# SpaceTokenizer
-start_time3 = time.time()
-print(SpaceTokenizer().tokenize(text), ', ', time.time() - start_time3,
-      ' - SpaceTokenizer')  # ['Не', 'ветер,', 'а', 'какой-то', 'ураган!']
+# # SpaceTokenizer
+# start_SpaceTokenizer = time.time()
+# result_SpaceTokenizer = SpaceTokenizer().tokenize(text)
+# # print(result_SpaceTokenizer)  # ['Не', 'ветер,', 'а', 'какой-то', 'ураган!']
+# print(time.time() - start_SpaceTokenizer, ' - SpaceTokenizer')
 
 
-# ToktokTokenizer
-start_time4 = time.time()
-text1 = u'Я - к.т.н., живу в США.'
-print(ToktokTokenizer().tokenize(text1), ', ', time.time() - start_time4,
-      ' - ToktokTokenizer')  # ['Не', 'ветер', ',', 'а', 'какой-то', 'ураган', '!']
+# # ToktokTokenizer
+# start_ToktokTokenizer = time.time()
+# result_ToktokTokenizer = ToktokTokenizer().tokenize(text1)
+# # print(result_ToktokTokenizer)  # ['Не', 'ветер', ',', 'а', 'какой-то', 'ураган', '!']
+# print(time.time() - start_ToktokTokenizer, ' - ToktokTokenizer')  
 
 
-# TweetTokenizer
-start_time5 = time.time()
-tknzr = TweetTokenizer()
-print(TweetTokenizer().tokenize(text), ', ', time.time() - start_time5,
-      ' - TweetTokenizer')  # ['Не', 'ветер', ',', 'а', 'какой-то', 'ураган', '!']
+# # TweetTokenizer
+# start_TweetTokenizer = time.time()
+# result_TweetTokenizer = TweetTokenizer().tokenize(text)
+# # print(result_TweetTokenizer)  # ['Не', 'ветер', ',', 'а', 'какой-то', 'ураган', '!']
+# print(time.time() - start_TweetTokenizer, ' - TweetTokenizer')  
 
 
-# NLTKWordTokenizer
-start_time6 = time.time()
-# ['Не', 'ветер', ',', 'а', 'какой-то', 'ураган', '!']
-print(word_tokenize(text), ', ', time.time() -
-      start_time6, ' - NLTKWordTokenizer')
+# # NLTKWordTokenizer
+# start_NLTKWordTokenizer = time.time()
+# result_NLTKWordTokenizer = word_tokenize(text)
+# # print(result_NLTKWordTokenizer)  # ['Не', 'ветер', ',', 'а', 'какой-то', 'ураган', '!']
+# print(time.time() - start_NLTKWordTokenizer, ' - NLTKWordTokenizer')
 
 
-# Re
-start_time8 = time.time()
-# ['Не', 'ветер', 'а', 'какой', 'то', 'ураган']
-result = re.findall(r'[^\W\d_]+', text)
-# ['Не', 'ветер', 'а', 'какой', 'то', 'ураган']
-result2 = re.findall(r'\w+', text)
-# ['Не', 'ветер', 'а', 'какой', 'то', 'ураган']
-result3 = re.findall(r'[А-Яа-яёЁ]+', text)
-# ['Не', 'ветер', 'а', 'какой-то', 'ураган']
-result4 = re.findall(r'\w+-\w+|\w+', text)
-# ['Не', 'ветер', ',', 'а', 'какой-то', 'ураган', '!']
-result5 = re.findall(r'\w+-\w+|\w+|[^\s+]', text)
-# print('Re 1: ', result)
-print(result5, ', ', time.time() - start_time8, ' - Re')
+# # Re
+# start_Re = time.time()
+# # ['Не', 'ветер', 'а', 'какой', 'то', 'ураган']
+# # result = re.findall(r'[^\W\d_]+', text)
+# # ['Не', 'ветер', 'а', 'какой', 'то', 'ураган']
+# # result2 = re.findall(r'\w+', text)
+# # ['Не', 'ветер', 'а', 'какой', 'то', 'ураган']
+# # result3 = re.findall(r'[А-Яа-яёЁ]+', text)
+# # ['Не', 'ветер', 'а', 'какой-то', 'ураган']
+# # result4 = re.findall(r'\w+-\w+|\w+', text)
+# # ['Не', 'ветер', ',', 'а', 'какой-то', 'ураган', '!']
+# # print('Re 1: ', result)
+# result_Re = re.findall(r'\w+-\w+|\w+|[^\s+]', text)
+# # print(result_Re)
+# # print(time.time() - start_Re, ' - Re')
 
 
 # SpaCy - токенизацию можно настроить
-start_time9 = time.time()
+import textacy
 nlp = Russian()
-doc = nlp("Я - к.т.н., живу в США.")
-# ['Не', 'ветер', ',', 'а', 'какой', '-', 'то', 'ураган', '!']
-print([token.text for token in doc], ', ',
-      time.time() - start_time9, ' - SpaCy')
+doc = nlp("Пушкин неоднократно писал о своей родословной в стихах и прозе; он видел в своих предках образец истинной «аристократии», древнего рода, честно служившего отечеству, но не снискавшего благосклонности правителей и «гонимого». Я-то из-за угла вышел.")
+start_SpaCy = time.time()
+
+result_SpaCy = list(textacy.extract.ngrams(doc, 1, filter_stops=False))
+print(result_SpaCy)
+print(time.time() - start_SpaCy, ' - SpaCy')
 
 
-# Pattern
-# start_time10 = time.time()
-# from pattern.text.en import parse
-# from pprint import pprint
-# pprint(parse('I drove my car to the hospital yesterday', relations=True, lemmata=True))
-# print(parse('I drove my car to the hospital yesterday', relations=True, lemmata=True).split())
+# # Pattern
+# from pattern.ru import ngrams
+# start_pattern = time.time()
+# result = ngrams(text, n=1)
+# # print(result)
+# print(time.time() - start_pattern, ' - Pattern')
 
 
-# Gensim (может й приравнивать к и -- deacc = True)
-start_time11 = time.time()
-# print(simple_preprocess(text, deacc = True))  # ['не', 'ветер', 'какои', 'то', 'ураган']
-print(simple_preprocess(text), ', ', time.time() - start_time11,
-      ' - Gensim')  # ['не', 'ветер', 'какой', 'то', 'ураган']
+# # Gensim (может й приравнивать к и -- deacc = True)
+# start_Gensim = time.time()
+# # print(simple_preprocess(text, deacc = True))  # ['не', 'ветер', 'какои', 'то', 'ураган']
+# result_Gensim = simple_preprocess(text)
+# # print(result_Gensim)  # ['не', 'ветер', 'какой', 'то', 'ураган']
+# print(time.time() - start_Gensim, ' - Gensim')  
 
 
-# Scikit-learn
-start_time12 = time.time()
-text33 = ["Я - к.т.н., живу в США."]
-vectorizer = CountVectorizer()
-data = vectorizer.fit_transform(text33).toarray()
-vocab = vectorizer.get_feature_names_out()
+# # Scikit-learn
+# start_Scikitlearn = time.time()
+# vectorizer = CountVectorizer()
+# data = vectorizer.fit_transform(text33).toarray()
+# vocab = vectorizer.get_feature_names_out()
 
-required_list = []
-for word in vocab:
-    required_list.extend(word.split())
-# ['ветер', 'какой', 'не', 'то', 'ураган']
-print(required_list, ', ', time.time() - start_time12, ' - Scikit-learn')
-
-
-# Keras
-start_time13 = time.time()
-textA = ["Я - к.т.н., живу в США."]
-tokenizer = Tokenizer(num_words=100)
-tokenizer.fit_on_texts(textA)
-word_indexes = tokenizer.word_index
-# {'не': 1, 'ветер': 2, 'а': 3, 'какой': 4, 'то': 5, 'ураган': 6}
-print(word_indexes, ', ', time.time() - start_time13, ' - Keras')
+# result_Scikitlearn = []
+# for word in vocab:
+#     result_Scikitlearn.extend(word.split())
+# # print(result_Scikitlearn)  # ['ветер', 'какой', 'не', 'то', 'ураган']
+# print(time.time() - start_Scikitlearn, ' - Scikit-learn')
 
 
-# Rutokenizer
-start_time14 = time.time()
-t = rutokenizer.Tokenizer()
-t.load()
-print([t for t in t.tokenize(u'Я - к.т.н., живу в США.')], ', ', time.time() -
-      start_time14, ' - Rutokenizer')  # ['Не', 'ветер', ',', 'а', 'какой-то', 'ураган', '!']
+# # Keras
+# start_Keras = time.time()
+# tokenizer = Tokenizer(num_words=100)
+# tokenizer.fit_on_texts(text33)
+# result_Keras = tokenizer.word_index
+# print(result_Keras)  # {'не': 1, 'ветер': 2, 'а': 3, 'какой': 4, 'то': 5, 'ураган': 6}
+# print(time.time() - start_Keras, ' - Keras')
 
 
-# TextBlob
-start_time15 = time.time()
-text_blob_object = TextBlob(text)
-document_sentence = text_blob_object.sentences
-document_words = text_blob_object.words
-# ['Не', 'ветер', 'а', 'какой-то', 'ураган']
-print(document_words, ', ', time.time() - start_time15, ' - TextBlob')
+# # Rutokenizer
+# start_Rutokenizer = time.time()
+# tokenizerr = rutokenizer.Tokenizer()
+# tokenizerr.load()
+# result_Rutokenizer = [t for t in tokenizerr.tokenize(text1)]
+# # print(result_Rutokenizer)  # ['Не', 'ветер', ',', 'а', 'какой-то', 'ураган', '!']
+# print(time.time() - start_Rutokenizer, ' - Rutokenizer')  
+
+
+# # TextBlob
+# start_TextBlob = time.time()
+# text_blob_object = TextBlob(text)
+# document_sentence = text_blob_object.sentences
+# result_TextBlob = text_blob_object.words
+# # print(result_TextBlob)  # ['Не', 'ветер', 'а', 'какой-то', 'ураган']
+# print(time.time() - start_TextBlob, ' - TextBlob')

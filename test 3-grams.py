@@ -1,6 +1,6 @@
 from textblob import TextBlob
 from sklearn.feature_extraction.text import CountVectorizer
-from pattern.ru import ngrams
+
 import textacy
 from spacy.lang.ru import Russian
 import time
@@ -15,8 +15,8 @@ text1 = u'Пушкин неоднократно писал о своей род�
 start_trigrams = time.time()
 trigrm = list(trigrams(ToktokTokenizer().tokenize(text1)))
 result = [' '.join(trigrmmmm) for trigrmmmm in trigrm]
-# print(result)
-result
+print(result)
+# result
 print(time.time() - start_trigrams, ' - NLTK Trigrams')
 
 
@@ -24,8 +24,8 @@ print(time.time() - start_trigrams, ' - NLTK Trigrams')
 start_ngrams = time.time()
 _1gram = ToktokTokenizer().tokenize(text1)
 _3gram = [' '.join(e) for e in ngrams(_1gram, 3)]
-# print(_3gram)
-_3gram
+print(_3gram)
+# _3gram
 print(time.time() - start_ngrams, ' - NLTK Ngrams')
 
 
@@ -44,14 +44,15 @@ doc = nlp("Пушкин неоднократно писал о своей род
 # ---2---
 start_spacy2 = time.time()
 ngrams = list(textacy.extract.ngrams(doc, 3))
-# print(ngrams)
+print(ngrams)
 print(time.time() - start_spacy2, ' - SpaCy')
 
 
 # Pattern
+from pattern.ru import ngrams
 start_pattern = time.time()
 result = ngrams(text, n=3)
-# print(result)
+print(result)
 print(time.time() - start_pattern, ' - Pattern')
 
 
@@ -61,12 +62,12 @@ c_vec = CountVectorizer(ngram_range=(3, 3))
 ngrams = c_vec.fit_transform([text])
 vocab = c_vec.vocabulary_
 result = [token for token in vocab]
-# print(result)
+print(result)
 print(time.time() - start_scikitlearn, ' - Scikit-learn')
 
 # TextBlob
 start_textblob = time.time()
 n_grams = list(TextBlob(text).ngrams(3))
 result = [' '.join(grams) for grams in n_grams]
-# print(result)
+print(result)
 print(time.time() - start_textblob, ' - TextBlob')
