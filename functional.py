@@ -13,8 +13,13 @@ def tokenize_and_clean(document, n):
     print(result_SpaCy)
     return result_SpaCy
 
-# *** сделать токенизацию с цифрами
-# *** сделать токенизацию со стоп словами
+# Виды токенизации:
+# ** по дефолту
+# ** с выбором критериев
+# * классическая полная на n-граммы
+# * с удалением стоп слов
+# * с удалением цифр
+# * с отбором определенных частей речи
 
 # ngramsss = list(textacy.extract.ngrams, n=2, include_pos={"NOUN", "ADJ"})
 # print(ngramsss)
@@ -31,7 +36,7 @@ def get_pos(doc, result):
     #             print(token_text, " - ", token_pos)
 
 # либо
-    print({token.text: token.pos_ for token in doc for token_ in result if token.text == token_.text})
+    print({token.text: token.pos_ for token in doc for token_ in result for x in token_ if token.text == x.text})
 
 # 3.	Лемматизация
 def get_lemma(doc, result):
@@ -43,9 +48,17 @@ def get_lemma(doc, result):
     #             token_lemma = token.lemma_
     #             print(token_text, " - ", token_lemma)
     # либо
-    print({token.text: token.lemma_ for token in doc for token_ in result if token.text == token_.text})
+    print({token.text: token.lemma_ for token in doc for token_ in result for x in token_ if token.text == x.text})
     # # либо
     # print(' '.join([token.lemma_ for token in doc]))
+    # for token in doc:
+    #     for token_ in result:
+    #         token_text = token.text
+    #         for x in token_:
+    #             if token_text == x.text:
+    #                 token_lemma = token.lemma_
+    #                 print(token_text, " - ", token_lemma)
+
 
 # 4**. парсинг зависимостей
 def get_relation(doc, result):
@@ -54,7 +67,13 @@ def get_relation(doc, result):
     #     token_text = token.text
     #     token_head = token.head.text
     #     print(token_text, " - ", token_head)
-    print({token.text: token.head.text for token in doc for token_ in result if token.text == token_.text})
+    print({token.text: token.head.text for token in doc for token_ in result for x in token_ if token.text == x.text})
+
+# + отрисовка зависимостей слов в предложении
+def display_roles(doc):
+    svg = displacy.render(doc, style="dep")
+    output_path = Path("images/sentence.svg")
+    output_path.open("w", encoding="utf-8").write(svg)
 
 
 # 4**. роль в предложении
@@ -64,17 +83,10 @@ def get_role(doc, result):
     #     token_text = token.text
     #     token_dep = token.dep_
     #     print(token_text, " - ", token_dep)
-    print({token.text: token.dep_ for token in doc for token_ in result if token.text == token_.text})
+    print({token.text: token.dep_ for token in doc for token_ in result for x in token_ if token.text == x.text})
 
 
-# # + отрисовка зависимостей слов в предложении
-def display_roles(doc):
-    svg = displacy.render(doc, style="dep")
-    output_path = Path("images/sentence.svg")
-    output_path.open("w", encoding="utf-8").write(svg)
-
-
-# 4***.	*Промежуточный необязательный шаг* – n-граммы с существительным
+# 4***.	n-граммы с существительным
 def nouns_ngrams(doc):
     terms = list(
         textacy.extract.terms(
@@ -104,7 +116,7 @@ def get_ents(doc):
     # ent_Spacy = list(textacy.extract.entities(doc))
     # return(ent_Spacy)
 
-# 4*****.	Можно еще внести распознавание семантической близости, но так как все кластеры будут похожи
+# 4*****.	Поиск синонимов
 def get_synonymss(doc):
     rs = textacy.resources.ConceptNet()
     # rs.download()
@@ -118,12 +130,13 @@ def all_together(doc, result_tok):
     for token in doc:
         for token_ in result_tok:
             token_text = token.text
-            if token_text == token_.text:
-                token_pos = token.pos_
-                token_dep = token.dep_
-                token_head = token.head.text
-                token_lemma = token.lemma_
-                print(
-                    f"{token_text:<16}{token_lemma:<16}{token_pos:<10}"
-                    f"{token_dep:<10}{token_head:<12}"
-                )
+            for x in token_:
+                if token_text == x.text:
+                    token_pos = token.pos_
+                    token_dep = token.dep_
+                    token_head = token.head.text
+                    token_lemma = token.lemma_
+                    print(
+                        f"{token_text:<16}{token_lemma:<16}{token_pos:<10}"
+                        f"{token_dep:<10}{token_head:<12}"
+                    )
