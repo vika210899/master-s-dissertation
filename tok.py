@@ -12,7 +12,7 @@ def tokenize_only(document, n):
         textacy.extract.ngrams(
             document, n, filter_stops=False, filter_nums=False)
         )
-    print(result_SpaCy)
+    print([ngram for ngram in result_SpaCy])
     return result_SpaCy
 
 
@@ -69,6 +69,19 @@ def tokenize_filter_ents(document, n):
     print(result_SpaCy)
     return result_SpaCy
 
+
+# Токенизация с фильтрацией именных сущностей
+def tokenize_ents(document, n):
+    if n == 4:
+        result_SpaCy = [ngram for n in range(1, 4)
+               for ngram in textacy.extract.ngrams(document, n, filter_stops=False, filter_nums=False)]
+    else:
+        result_SpaCy = list(
+        textacy.extract.ngrams(document, n, filter_stops=False, filter_nums=False)
+        )
+    result_SpaCy = remove_ents(document, result_SpaCy)
+    print(result_SpaCy)
+    return result_SpaCy
 
 # Поиск именованных сущностей
 def remove_ents(document, result_tokenize):
