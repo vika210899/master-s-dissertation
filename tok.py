@@ -1,6 +1,7 @@
 import textacy
 import textacy.resources
 import time
+import functional
 
 # Токенизация без фильтрации
 def tokenize_only(document, n):
@@ -12,11 +13,9 @@ def tokenize_only(document, n):
         textacy.extract.ngrams(
             document, n, filter_stops=False, filter_nums=False)
         )
-    print([ngram for ngram in result_SpaCy])
     return result_SpaCy
 
 
-# по умолчанию
 # Токенизация с фильтрацией стоп-слов и цифр
 def tokenize_filter(document, n):
     if n == 4:
@@ -26,7 +25,6 @@ def tokenize_filter(document, n):
         result_SpaCy = list(
         textacy.extract.ngrams(document, n, filter_stops=True, filter_nums=True)
         )
-    print(result_SpaCy)
     return result_SpaCy
 
 
@@ -39,7 +37,6 @@ def tokenize_checkPOS(document, n):
         result_SpaCy = list(
         textacy.extract.ngrams(document, n, filter_stops=False, filter_nums=False, include_pos={"NOUN", "ADJ"})
         )
-    print(result_SpaCy)
     return result_SpaCy
 
 
@@ -52,10 +49,10 @@ def tokenize_filter_checkPOS(document, n):
         result_SpaCy = list(
         textacy.extract.ngrams(document, n, filter_stops=True, filter_nums=True, include_pos={"NOUN", "ADJ"})
         )
-    print(result_SpaCy)
     return result_SpaCy
 
 
+# по умолчанию
 # Токенизация с фильтрацией стоп-слов, цифр и именных сущностей
 def tokenize_filter_ents(document, n):
     if n == 4:
@@ -65,8 +62,7 @@ def tokenize_filter_ents(document, n):
         result_SpaCy = list(
         textacy.extract.ngrams(document, n, filter_stops=True, filter_nums=True)
         )
-    result_SpaCy = remove_ents(document, result_SpaCy)
-    print(result_SpaCy)
+    result_SpaCy = functional.remove_ents(document, result_SpaCy)
     return result_SpaCy
 
 
@@ -79,15 +75,5 @@ def tokenize_ents(document, n):
         result_SpaCy = list(
         textacy.extract.ngrams(document, n, filter_stops=False, filter_nums=False)
         )
-    result_SpaCy = remove_ents(document, result_SpaCy)
-    print(result_SpaCy)
+    result_SpaCy = functional.remove_ents(document, result_SpaCy)
     return result_SpaCy
-
-# Поиск именованных сущностей
-def remove_ents(document, result_tokenize):
-    for ent in document.ents:
-        for n_gramm in result_tokenize:
-            for x in n_gramm:
-                if str(ent) == str(x):
-                    result_tokenize.remove(n_gramm)
-    return result_tokenize

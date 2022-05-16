@@ -9,14 +9,13 @@ doc = nlp(text)
 
 # time_start = time.time()
 
-result_SpaCy = tok.tokenize_only(doc, 4)
-# functional.get_ents(doc) # ПОРАБОТАТЬ НАД УДАЛЕНИЕМ ИХ ИЗ КЛЮЧЕВЫХ ЭЛЕМЕНТОВ
-# functional.display_roles(doc) # может понадобиться для выделения КС
-# functional.get_synonymss(doc) # может понадобиться для составления размеченных данных при малом количестве обучающего материала
-# terms = functional.nouns_ngrams(doc) # скорее всего перерастет в один из разновидностей токенизации
+result_SpaCy = tok.tokenize_only(doc, 1)
+# functional.get_ents(doc)
+# functional.display_roles(doc)
+# functional.get_synonymss(doc[15])
 
 # functional.get_lemma(doc, result_SpaCy)  
-functional.get_pos(doc, result_SpaCy)  
+print(functional.get_pos(doc, result_SpaCy))  
 # functional.get_relation(doc, result_SpaCy)  
 # functional.get_role(doc, result_SpaCy)  
 # functional.all_together(doc, result_SpaCy)  

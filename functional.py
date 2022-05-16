@@ -1,7 +1,6 @@
 import textacy
 from spacy import displacy
 from pathlib import Path
-from functools import partial
 import textacy.resources
 import time
 import spacy
@@ -9,44 +8,20 @@ import spacy
 
 # Определение частей речи
 def get_pos(doc, result):
-    print("Часть речи: ")
-    print(
-        {
-            token.text: spacy.explain(token.pos_)
-            for token in doc
-            for token_ in result
-            for x in token_
-            if token.text == x.text
-        }
-    )
+    pos_res = list(spacy.explain(token.pos_) for token in doc for token_ in result for x in token_ if token.text == x.text)
+    return pos_res
 
 
 # Лемматизация
 def get_lemma(doc, result):
-    print("Лемматизация: ")
-    print(
-        {
-            token.text: token.lemma_
-            for token in doc
-            for token_ in result
-            for x in token_
-            if token.text == x.text
-        }
-    )
+    lemm_res = list(spacy.explain(token.lemma_) for token in doc for token_ in result for x in token_ if token.text == x.text)
+    return lemm_res
 
 
 # Парсинг зависимостей
 def get_relation(doc, result):
-    print("Зависимости от других слов: ")
-    print(
-        {
-            token.text: token.head.text
-            for token in doc
-            for token_ in result
-            for x in token_
-            if token.text == x.text
-        }
-    )
+    relation_res = list(spacy.explain(token.head.text) for token in doc for token_ in result for x in token_ if token.text == x.text)
+    return relation_res
 
 
 # + Отрисовка зависимостей слов в предложении
@@ -58,31 +33,32 @@ def display_roles(doc):
 
 # Роль в предложении
 def get_role(doc, result):
-    print("Роль в предложении: ")
-    print(
-        {
-            token.text: token.dep_
-            for token in doc
-            for token_ in result
-            for x in token_
-            if token.text == x.text
-        }
-    )
+    role_res = list(spacy.explain(token.dep_) for token in doc for token_ in result for x in token_ if token.text == x.text)
+    return role_res
 
 
 # Поиск именованных сущностей
 # распознаются и простые имена и фамилии!!!!!!!!!!!!!! д.б. написаны в определенном порядке
 def get_ents(doc):
-    for ent in doc.ents:
-        print(ent.text, ent.label_)
+    ents_res = list(ent.label_ for ent in doc.ents)
+    return ents_res
+
+
+# Удаление именованных сущностей
+def remove_ents(document, result_tokenize):
+    for ent in document.ents:
+        for n_gramm in result_tokenize:
+            for x in n_gramm:
+                if str(ent) == str(x):
+                    result_tokenize.remove(n_gramm)
+    return result_tokenize
 
 
 # Поиск синонимов
-def get_synonymss(doc):
+def get_synonymss(token):
     rs = textacy.resources.ConceptNet()
     # rs.download()
-    syn = rs.get_synonyms(term=doc[15].lemma_, lang="ru", sense="n")
-    print(syn)
+    syn = rs.get_synonyms(term=token.lemma_, lang="ru", sense="n")
     return syn
 
 

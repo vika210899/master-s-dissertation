@@ -5,7 +5,7 @@ from tkinter import scrolledtext
 import tok
 import spacy
   
-text = "Пушкин неоднократно писал о своей родословной в стихах и прозе; он видел в своих предках образец истинной «аристократии», древнего рода, честно служившего отечеству, но не снискавшего благосклонности правителей и «гонимого». Я-то из-за угла вышел 7 апреля в Минске в Газпроме."
+text = "Пушкин неоднократно писал о своей родословной в стихах и прозе; он видел в своих предках образец истинной «аристократии», древнего рода, честно служившего отечеству, но не снискавшего благосклонности правителей и «гонимого». (1999)"
 nlp = spacy.load('ru_core_news_sm')
 doc = nlp(text)
 
@@ -141,7 +141,7 @@ txt.pack_forget()
 label_frame_third = LabelFrame(window, text='Нужен отбор частей речи?')
 label_frame_third.pack_forget()
 lbl31 = Label(label_frame_third, text='При выборе опции "отбор частей речи" в выходных данных алгоритма Вы увидите только').pack(padx=10, pady=0)
-lbl31 = Label(label_frame_third, text='существительные и прилагательные (именные сущности тоже будут отфильтрованы).').pack(padx=10, pady=0)
+lbl31 = Label(label_frame_third, text='существительные и прилагательные (именные сущности будут удалены).').pack(padx=10, pady=0)
 frame_third_rad = Frame(label_frame_third)
 frame_third_rad.pack(padx=10, pady=0)
 selected_third = IntVar()  
