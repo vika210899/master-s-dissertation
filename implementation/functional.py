@@ -1,18 +1,23 @@
 import textacy
 from spacy import displacy
 from pathlib import Path
-from functools import partial
 import textacy.resources
 import time
-import spacy
 from config import Constants
 
 
 # Определение частей речи (spacy.explain(token.pos_))
-def get_pos(result):
+def get_pos(result, n):
     result_new = []
-    for n_gramm in result:
-        result_new.append(n_gramm.pos_)
+    if n == 1:
+        for n_gramm in result:
+            result_new.append(n_gramm.pos_)
+    else:
+        for n_gramm in result:
+            n_gramm_new = []
+            for i in range(len(n_gramm)):
+                n_gramm_new.append(n_gramm[i].pos_)
+            result_new.append(n_gramm_new)
     return result_new
 
 
@@ -32,10 +37,17 @@ def get_lemma(result, n):
 
 
 # Парсинг зависимостей
-def get_relation(result):
+def get_relation(result, n):
     result_new = []
-    for n_gramm in result:
-        result_new.append(n_gramm.head.text)
+    if n == 1:
+        for n_gramm in result:
+            result_new.append(n_gramm.head.text)
+    else:
+        for n_gramm in result:
+            n_gramm_new = []
+            for i in range(len(n_gramm)):
+                n_gramm_new.append(n_gramm[i].head.text)
+            result_new.append(n_gramm_new)
     return result_new
 
 
@@ -47,63 +59,83 @@ def display_roles(doc):
 
 
 # Роль в предложении
-def get_role(result):
+def get_role(result, n):
     result_new = []
-    for n_gramm in result:
-        result_new.append(n_gramm.dep_)
+    if n == 1:
+        for n_gramm in result:
+            result_new.append(n_gramm.dep_)
+    else:
+        for n_gramm in result:
+            n_gramm_new = []
+            for i in range(len(n_gramm)):
+                n_gramm_new.append(n_gramm[i].dep_)
+            result_new.append(n_gramm_new)
     return result_new
 
 
-# Поиск именованных сущностей
-# распознаются и простые имена и фамилии!!!!!!!!!!!!!! д.б. написаны в определенном порядке
+# Поиск именованных сущностей, зависит от порядка написания
+# "имя фамилия" -> "[имя фамилия]" - как одна сущности, например, "Виктория Терещенко" -> [Виктория Терещенко]
+# а не "фамилия имя" -> "[фамилия], [имя]" - как две сущности, например, "Терещенко Виктория" -> [Терещенко, Виктория]
 def get_ents(doc):
-    ents_res = list(ent.label_ for ent in doc.ents)
+    ents_res = list(ent for ent in doc.ents)
     return ents_res
 
 
 # Удаление именованных сущностей
 def remove_ents(document, result_tokenize):
     for ent in document.ents:
-        for n_gramm in result_tokenize:
-            for x in n_gramm:
-                if str(ent) == str(x):
-                    result_tokenize.remove(n_gramm)
+        for y in ent:
+            for n_gramm in result_tokenize:
+                for x in n_gramm:
+                        if str(y) == str(x):
+                            result_tokenize.remove(n_gramm)
     return result_tokenize
 
 
 # Поиск синонимов
-def get_synonymss(token):
+def get_synonymss(result, n):
     rs = textacy.resources.ConceptNet()
     # rs.download()
-    syn = rs.get_synonyms(term=token.lemma_, lang="ru", sense="n")
-    return syn
+    result_new = []
+    if n == 1:
+        for n_gramm in result:
+            syn = rs.get_synonyms(term=n_gramm.lemma_, lang="ru", sense="n")
+            result_new.append(syn)
+    else:
+        for n_gramm in result:
+            n_gramm_new = []
+            for i in range(len(n_gramm)):
+                syn = rs.get_synonyms(term=n_gramm[i].lemma_, lang="ru", sense="n")
+                n_gramm_new.append(syn)
+            result_new.append(n_gramm_new)
+    return result_new
 
 
 # Удаление специализированных стоп-слов из собственного списка
 def remove_spec_stop_words(result_tokenize, n):
-        stop_words_list = []
+    stop_words_list = []
 
-        with open(Constants.STOPLIST_FILE_NAME, "r") as f:
-            for line in f:
-                stop_words_list.extend(line.split()) 
-        
-        print(stop_words_list)
-        if n == 1:
-            for word in stop_words_list:
-                for n_gramm in result_tokenize:
-                    if str(word) == str(n_gramm):
+    with open(Constants.STOPLIST_FILE_NAME, "r") as f:
+        for line in f:
+            stop_words_list.extend(line.split()) 
+    
+    if n == 1:
+        for word in stop_words_list:
+            for n_gramm in result_tokenize:
+                if str(word) == str(n_gramm):
+                    result_tokenize.remove(n_gramm)
+    else:
+        for word in stop_words_list:
+            for n_gramm in result_tokenize:
+                for x in n_gramm:
+                    if str(word) == str(x):
                         result_tokenize.remove(n_gramm)
-        else:
-            for word in stop_words_list:
-                for n_gramm in result_tokenize:
-                    for x in n_gramm:
-                        if str(word) == str(x):
-                            result_tokenize.remove(n_gramm)
-        return result_tokenize
+    return result_tokenize
 
 
 # Все вместе
-def all_together(doc, result_tok):
+def print_all_together(doc, result_tok):
+    print(f"{'text':<16}{'lemma':<16}{'part of speach':<18}{'role':<10}{'dependent':<12}")
     for token in doc:
         for token_ in result_tok:
             token_text = token.text
@@ -114,6 +146,6 @@ def all_together(doc, result_tok):
                     token_head = token.head.text
                     token_lemma = token.lemma_
                     print(
-                        f"{token_text:<16}{token_lemma:<16}{token_pos:<10}"
+                        f"{token_text:<16}{token_lemma:<16}{token_pos:<18}"
                         f"{token_dep:<10}{token_head:<12}"
                     )
