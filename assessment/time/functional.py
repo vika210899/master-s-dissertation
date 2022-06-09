@@ -2,7 +2,6 @@ import textacy
 from spacy import displacy
 from pathlib import Path
 import textacy.resources
-import time
 from config import Constants
 
 
@@ -87,8 +86,8 @@ def remove_ents(document, result_tokenize):
         for y in ent:
             for n_gramm in result_tokenize:
                 for x in n_gramm:
-                        if str(y) == str(x):
-                            result_tokenize.remove(n_gramm)
+                    if str(y) == str(x):
+                        result_tokenize.remove(n_gramm)
     return result_tokenize
 
 
@@ -105,7 +104,8 @@ def get_synonymss(result, n):
         for n_gramm in result:
             n_gramm_new = []
             for i in range(len(n_gramm)):
-                syn = rs.get_synonyms(term=n_gramm[i].lemma_, lang="ru", sense="n")
+                syn = rs.get_synonyms(
+                    term=n_gramm[i].lemma_, lang="ru", sense="n")
                 n_gramm_new.append(syn)
             result_new.append(n_gramm_new)
     return result_new
@@ -118,8 +118,8 @@ def remove_spec_stop_words(result_tokenize, n):
 
     with open(Constants.STOPLIST_FILE_NAME, "r") as f:
         for line in f:
-            stop_words_list.extend(line.split()) 
-    
+            stop_words_list.extend(line.split())
+
     if n == 1:
         for word in stop_words_list:
             for n_gramm in result_tokenize:
@@ -131,10 +131,10 @@ def remove_spec_stop_words(result_tokenize, n):
                 for x in n_gramm:
                     if str(x) == str(word):
                         words_for_delete.append(n_gramm)
-    
+
     for word in words_for_delete:
         result_tokenize.remove(word)
-    
+
     return result_tokenize
 
 

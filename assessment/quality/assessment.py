@@ -4,7 +4,7 @@ import spacy
 
 
 test_text = xlsx_in_txt.read_data()
-test_text = test_text[0] #16, 14
+test_text = test_text[0]  # 16, 14
 
 nlp = spacy.load('ru_core_news_sm')
 n = 3

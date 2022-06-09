@@ -1,4 +1,3 @@
-import time
 import spacy
 import functional
 import tok
@@ -7,25 +6,21 @@ text = "Пушкин неоднократно писал о своей родо�
 nlp = spacy.load('ru_core_news_sm')
 doc = nlp(text)
 
-# time_start = time.time()
-
-result_SpaCy = tok.tokenize_only(doc, 1)
-# functional.get_ents(doc)
+n = 2
+result_SpaCy = tok.tokenize_only(doc, n)
+# print(functional.get_ents(doc))
 # functional.display_roles(doc)
-# functional.get_synonymss(doc[15])
+# print(functional.get_synonymss(result_SpaCy, n))
+# print(functional.get_lemma(result_SpaCy, n))
+# print(functional.get_pos(result_SpaCy, n))
+# print(functional.get_relation(result_SpaCy, n))
+# print(functional.get_role(result_SpaCy, n))
+# print(functional.print_all_together(doc, result_SpaCy))
+# print(functional.remove_ents(doc, result_SpaCy))
 
-# functional.get_lemma(doc, result_SpaCy)  
-print(functional.get_pos(doc, result_SpaCy))  
-# functional.get_relation(doc, result_SpaCy)  
-# functional.get_role(doc, result_SpaCy)  
-# functional.all_together(doc, result_SpaCy)  
-
-# functional.nouns_ngrams(doc)
-
-# tok.tokenize_filter_ents(doc, 3)
-# tok.tokenize_filter(doc, 3)
-# tok.tokenize_only(doc, 3)
-# tok.tokenize_checkPOS(doc, 3)
-# tok.tokenize_filter_checkPOS(doc, 3)
-
-# print(time.time() - time_start)
+# print(tok.tokenize_filter_ents(doc, n))
+# print(tok.tokenize_filter(doc, n))
+# print(tok.tokenize_only(doc, n))
+# print(tok.tokenize_checkPOS(doc, n))
+# print(tok.tokenize_filter_checkPOS(doc, n))
+# print(tok.tokenize_ents(doc, n))

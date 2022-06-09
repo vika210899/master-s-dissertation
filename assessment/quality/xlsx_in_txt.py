@@ -1,5 +1,6 @@
 from openpyxl import load_workbook
 
+
 def read_data():
     wb = load_workbook('popisyat.xlsx')
     sheet = wb['Лист1']
