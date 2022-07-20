@@ -7,7 +7,7 @@ import spacy
 st_txt = time.time()
 st_txt_ns = time.time_ns()
 test_text = xlsx_in_txt.read_data()
-test_text = test_text[0:100]
+test_text = test_text[500:600]
 fin_txt = time.time() - st_txt
 fin_txt_ns = time.time_ns() - st_txt_ns
 

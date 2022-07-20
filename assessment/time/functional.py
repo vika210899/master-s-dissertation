@@ -88,6 +88,7 @@ def remove_ents(document, result_tokenize):
                 for x in n_gramm:
                     if str(y) == str(x):
                         result_tokenize.remove(n_gramm)
+                        break
     return result_tokenize
 
 
