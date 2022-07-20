@@ -8,12 +8,17 @@ from config import Constants
 # Определение частей речи (spacy.explain(token.pos_))
 def get_pos(result, n):
     result_new = []
+    # для униграмм (для n = 1)
     if n == 1:
+        # для каждой униграммы в результате токенизации выясняем его часть речи
         for n_gramm in result:
             result_new.append(n_gramm.pos_)
+    # для остальных (для n = 2, 3 или 4)
     else:
+        # для каждой униграммы в результате токенизации
         for n_gramm in result:
             n_gramm_new = []
+            # для каждого слова n-грамма выясняем часть речи
             for i in range(len(n_gramm)):
                 n_gramm_new.append(n_gramm[i].pos_)
             result_new.append(n_gramm_new)
@@ -23,12 +28,17 @@ def get_pos(result, n):
 # Лемматизация
 def get_lemma(result, n):
     result_new = []
+    # для униграмм (для n = 1)
     if n == 1:
+        # для каждой униграммы в результате токенизации выясняем его лемму
         for n_gramm in result:
             result_new.append(n_gramm.lemma_)
+    # для остальных (для n = 2, 3 или 4)
     else:
+        # для каждой униграммы в результате токенизации
         for n_gramm in result:
             n_gramm_new = []
+            # для каждого слова n-грамма выясняем лемму
             for i in range(len(n_gramm)):
                 n_gramm_new.append(n_gramm[i].lemma_)
             result_new.append(n_gramm_new)
@@ -38,12 +48,17 @@ def get_lemma(result, n):
 # Парсинг зависимостей
 def get_relation(result, n):
     result_new = []
+    # для униграмм (для n = 1)
     if n == 1:
+        # для каждой униграммы в результате токенизации выясняем его главное слово (слово, от которого оно зависит)
         for n_gramm in result:
             result_new.append(n_gramm.head.text)
+    # для остальных (для n = 2, 3 или 4)
     else:
+        # для каждой униграммы в результате токенизации
         for n_gramm in result:
             n_gramm_new = []
+            # для каждого слова n-грамма выясняем главное слово
             for i in range(len(n_gramm)):
                 n_gramm_new.append(n_gramm[i].head.text)
             result_new.append(n_gramm_new)
@@ -88,6 +103,7 @@ def remove_ents(document, result_tokenize):
                 for x in n_gramm:
                     if str(y) == str(x):
                         result_tokenize.remove(n_gramm)
+                        break
     return result_tokenize
 
 
