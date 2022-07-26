@@ -15,5 +15,4 @@ class TextProcessing:
         # потому что после лемматизации в result_tok будут лежать str, а не span и token, которые нужны spacy для выполнения многих функций
         result_tok = functional.get_lemma(result_tok, n)  # лемматизируем полученные токены
         result_tok = functional.remove_spec_stop_words(result_tok, n)  # удаляем специализированные стоп слова
-
         return result_tok
