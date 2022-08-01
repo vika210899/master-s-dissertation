@@ -5,9 +5,10 @@ from tkinter import scrolledtext
 import tok
 import spacy
 
+# Введение тестового фрагмента текста
 text = "Пушкин неоднократно писал о своей родословной в стихах и прозе; он видел в своих предках образец истинной «аристократии», древнего рода, честно служившего отечеству, но не снискавшего благосклонности правителей и «гонимого». (1999)"
-nlp = spacy.load('ru_core_news_sm')
-doc = nlp(text)
+nlp = spacy.load('ru_core_news_sm')  # загрузка модели spacy для обработки русского языка
+doc = nlp(text)  # создание объекта doc
 
 # Шаги интерфейса:
 # *** n = ?
@@ -17,30 +18,39 @@ doc = nlp(text)
 # *3) фильтр ents нужен?
 
 
+# описание построения интерфейса (не особо интересно, долго и нудно)
+
+# функция для создания первого фрейма "на какие токены вы хотите декомпозировать текст?"
 def clicked_first_frame():
-    value_first_frame = selected_first.get()
-    label_frame_second.pack(padx=10, pady=10)
-    return value_first_frame
+    value_first_frame = selected_first.get()  # получаем значение выбора из первого фрейма
+    label_frame_second.pack(padx=10, pady=10)  # отрисовываем следующий фрейм
+    return value_first_frame  # возвращаем значение, выбранное в первом фрейме
 
 
+# функция для создания первого фрейма "Делаем декомпозицию по умолчанию?"
 def clicked_second_frame():
-    value_second_frame = selected_second.get()
-    if value_second_frame == 2:
-        txt.pack_forget()
-        label_frame_third.pack(padx=10, pady=10)
-    else:
+    value_second_frame = selected_second.get()  # получаем значение выбора из второго фрейма
+    if value_second_frame == 2:  # если выбрана декомпозиция с выбором параметров
+        txt.pack_forget()  # прячем окошко с выводом результатов
+        label_frame_third.pack(padx=10, pady=10)  # и выводим следующий фрейм
+    else:  # если выбрана декомпозиция по умолчанию
+        # прячем все последующие фреймы
         label_frame_third.pack_forget()
         label_frame_fourth.pack_forget()
         label_frame_fifth.pack_forget()
         label_frame_sixth.pack_forget()
         label_frame_seventh.pack_forget()
+        # и отрисовываем текстовое поле с результатами декомпозиции по умолчанию
         txt.pack(padx=10, pady=10)
         txt.delete(1.0, END)
         txt.insert(INSERT, "".join(
             str([ngram for ngram in tok.tokenize_filter_ents(doc, clicked_first_frame())])))
-    return value_second_frame
+    return value_second_frame  # возвращаем значение, выбранное во втором фрейме
 
 
+# и так далее (надо ли комментировать далее?)
+
+# функция для создания первого фрейма "Нужен отбор частей речи?"
 def clicked_third_frame():
     value_third_frame = selected_third.get()
     if value_third_frame == 2:
@@ -58,6 +68,7 @@ def clicked_third_frame():
     return value_third_frame
 
 
+# функция для создания первого фрейма "Нужен фильтр стоп-слов и цифр?"
 def clicked_fourth_frame():
     value_fourth_frame = selected_fourth.get()
     if value_fourth_frame == 2:
@@ -73,6 +84,7 @@ def clicked_fourth_frame():
     return value_fourth_frame
 
 
+# функция для создания первого фрейма "Нужен фильтр стоп-слов и цифр?"
 def clicked_fifth_frame():
     value_fifth_frame = selected_fifth.get()
     if value_fifth_frame == 2:
@@ -86,6 +98,7 @@ def clicked_fifth_frame():
     return value_fifth_frame
 
 
+# функция для создания первого фрейма "Нужен фильтр именных сущностей?"
 def clicked_sixth_frame():
     value_sixth_frame = selected_sixth.get()
     if value_sixth_frame == 2:
@@ -101,6 +114,7 @@ def clicked_sixth_frame():
     return value_sixth_frame
 
 
+# функция для создания первого фрейма "Нужен фильтр именных сущностей?"
 def clicked_seventh_frame():
     value_seventh_frame = selected_seventh.get()
     if value_seventh_frame == 2:
@@ -116,32 +130,33 @@ def clicked_seventh_frame():
     return value_seventh_frame
 
 
-window = Tk()
-window.title("Алгоритм декомпозиции текста на ключевые элементы")
-window.geometry('600x800')
+window = Tk()  # создаем окно для интерфейса
+window.title("Алгоритм декомпозиции текста на ключевые элементы")  # даем ему название
+window.geometry('600x800')  # задаем размер
 
-scroll_bar = Scrollbar(window)
+scroll_bar = Scrollbar(window)  # добавляем скроллинг
 scroll_bar.pack(side=RIGHT, fill=Y)
 
-# ---1---
+# ---1--- содержимое первого фрейма
 label_frame_first = LabelFrame(
-    window, text='На какие токены хотите декомпозировать текст?')
-label_frame_first.pack(padx=10, pady=10)
-frame_first_rad = Frame(label_frame_first)
-frame_first_rad.pack(padx=10, pady=0)
-selected_first = IntVar()
+    window, text='На какие токены хотите декомпозировать текст?')  # его название
+label_frame_first.pack(padx=10, pady=10)  # размер фрейма
+frame_first_rad = Frame(label_frame_first)  # содаем фрейм для радио кнопок
+frame_first_rad.pack(padx=10, pady=0)  # и его размер
+selected_first = IntVar()  # создаем переменную, которая запоминает выбор в данном фрейме 
 rad1 = Radiobutton(frame_first_rad, text='Униграммы', value=1,
-                   variable=selected_first).pack(side=tkinter.LEFT, padx=10, pady=5)
+                   variable=selected_first).pack(side=tkinter.LEFT, padx=10, pady=5)  # создаем первую радиокнопку с нужным названием, размерами и расположением
 rad2 = Radiobutton(frame_first_rad, text='Биграммы', value=2,
-                   variable=selected_first).pack(side=tkinter.LEFT, padx=10, pady=5)
+                   variable=selected_first).pack(side=tkinter.LEFT, padx=10, pady=5)  # создаем 2-ю радиокнопку
 rad3 = Radiobutton(frame_first_rad, text='Триграммы', value=3,
-                   variable=selected_first).pack(side=tkinter.LEFT, padx=10, pady=5)
+                   variable=selected_first).pack(side=tkinter.LEFT, padx=10, pady=5)  # создаем 3-ю радиокнопку
 rad4 = Radiobutton(frame_first_rad, text='1-2-3-граммы', value=4,
-                   variable=selected_first).pack(side=tkinter.LEFT, padx=10, pady=5)
+                   variable=selected_first).pack(side=tkinter.LEFT, padx=10, pady=5)  # создаем 4-ю радиокнопку
 btn = Button(label_frame_first, text="Выбрать",
-             command=clicked_first_frame).pack(padx=10, pady=5)
+             command=clicked_first_frame).pack(padx=10, pady=5)  # создаем кнопку выбора
 
 
+# подобным образом описываем остальные фреймы
 # ---2---
 label_frame_second = LabelFrame(
     window, text='Делаем декомпозицию по умолчанию?')
@@ -159,8 +174,8 @@ btn2 = Button(label_frame_second, text="Выбрать",
               command=clicked_second_frame).pack(padx=10, pady=5)
 
 
-txt = scrolledtext.ScrolledText(window, width=60, height=10)
-txt.pack_forget()
+txt = scrolledtext.ScrolledText(window, width=60, height=10)  # окошко для вывода результата токенизации
+txt.pack_forget()  # для того, чтобы спрятать окошко при выборе других параметров
 
 
 # ---3---

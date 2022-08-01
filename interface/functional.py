@@ -1,73 +1,91 @@
 import textacy
+import spacy
 from spacy import displacy
 from pathlib import Path
 import textacy.resources
 
 
-# Определение частей речи (spacy.explain(token.pos_))
+# Определение частей речи 
+# вывод расшифровки тега pos: print(spacy.explain(token.pos_) for token in result)
 def get_pos(result, n):
-    result_new = []
+    result_new = [] # список для записи результатов функции
+    # для униграмм (для n = 1)
     if n == 1:
+        # для каждой униграммы в результате токенизации выясняем ее часть речи
         for n_gramm in result:
-            result_new.append(n_gramm.pos_)
+            result_new.append(n_gramm.pos_) # и добавляем часть речи в список результатов функции
+                                            # .pos_ - встроенная функция определения частей речи из библиотеки spacy
+    # для остальных (для n = 2, 3 или 4)
     else:
+        # для каждого n-грамма в результате токенизации
         for n_gramm in result:
-            n_gramm_new = []
+            n_gramm_new = [] # список записи частей речи для словосочетания
+            # для каждого слова в словосочетании выясняем часть речи
             for i in range(len(n_gramm)):
-                n_gramm_new.append(n_gramm[i].pos_)
-            result_new.append(n_gramm_new)
+                n_gramm_new.append(n_gramm[i].pos_) # и записываем в список для словосочетания
+            result_new.append(n_gramm_new) # и потом этот список заносим в большой список результатов
     return result_new
 
 
 # Лемматизация
 def get_lemma(result, n):
-    result_new = []
+    result_new = [] # список для записи результатов функции
+    # для униграмм (для n = 1)
     if n == 1:
+        # для каждой униграммы в результате токенизации выясняем ее лемму
         for n_gramm in result:
-            result_new.append(n_gramm.lemma_)
+            result_new.append(n_gramm.lemma_) # и добавляем лемму в список результатов функции
+                                            # .lemma_ - встроенная функция определения начальной формы слова из библиотеки spacy
+    # для остальных (для n = 2, 3 или 4)
     else:
+        # для каждого n-грамма в результате токенизации
         for n_gramm in result:
-            n_gramm_new = []
+            n_gramm_new = [] # список записи лемм для одного словосочетания
+            # для каждого слова в словосочетании выясняем лемму
             for i in range(len(n_gramm)):
-                n_gramm_new.append(n_gramm[i].lemma_)
-            result_new.append(n_gramm_new)
+                n_gramm_new.append(n_gramm[i].lemma_) # и записываем ее в список для словосочетания
+            result_new.append(n_gramm_new) # и потом этот список заносим в большой список результатов
     return result_new
 
 
 # Парсинг зависимостей
 def get_relation(result, n):
-    result_new = []
-    if n == 1:
-        for n_gramm in result:
-            result_new.append(n_gramm.head.text)
-    else:
-        for n_gramm in result:
-            n_gramm_new = []
+    result_new = [] # список для записи результатов функции
+    if n == 1: # для униграмм (для n = 1)
+        for n_gramm in result: # для каждой униграммы в результате токенизации выясняем для нее главное слово (слово, от которого она зависит)
+            result_new.append(n_gramm.head.text) # и добавляем его в список результатов функции
+                                                # .head - встроенная функция определения главного слова из библиотеки spacy
+                                                # .text - встроенная функция определения текстовой формы объекта doc
+    else: # для остальных (для n = 2, 3 или 4)
+        for n_gramm in result: # для каждого n-грамма в результате токенизации
+            n_gramm_new = [] # создаем список зависимостей для одного словосочетания
+            # для каждого слова в словосочетании выясняем главное слово
             for i in range(len(n_gramm)):
-                n_gramm_new.append(n_gramm[i].head.text)
-            result_new.append(n_gramm_new)
+                n_gramm_new.append(n_gramm[i].head.text) # и записываем его в список для словосочетания
+            result_new.append(n_gramm_new) # и потом этот список заносим в большой список результатов
     return result_new
 
 
 # + Отрисовка зависимостей слов в предложении
 def display_roles(doc):
-    svg = displacy.render(doc, style="dep")
-    output_path = Path("images/sentence.svg")
-    output_path.open("w", encoding="utf-8").write(svg)
+    svg = displacy.render(doc, style="dep") # отрисовываем зависимости
+    output_path = Path("images/sentence.svg") # создаем файл по указанному адресу
+    output_path.open("w", encoding="utf-8").write(svg) # заносим схему зависимостей в указанный файл
 
 
 # Роль в предложении
 def get_role(result, n):
-    result_new = []
-    if n == 1:
-        for n_gramm in result:
-            result_new.append(n_gramm.dep_)
-    else:
-        for n_gramm in result:
-            n_gramm_new = []
-            for i in range(len(n_gramm)):
-                n_gramm_new.append(n_gramm[i].dep_)
-            result_new.append(n_gramm_new)
+    result_new = [] # список для записи результатов функции
+    if n == 1: # для униграмм (для n = 1)
+        for n_gramm in result: # для каждой униграммы в результате токенизации выясняем ее роль в предложении
+            result_new.append(n_gramm.dep_) # заносим роль в список результатов функции
+                                            # .dep_ - встроенная функция определения роли слова в предложении из библиотеки spacy
+    else: # для остальных (для n = 2, 3 или 4)
+        for n_gramm in result:  # для каждого n-грамма в результате токенизации
+            n_gramm_new = [] # создаем список ролей для одного словосочетания
+            for i in range(len(n_gramm)): # для каждого слова в словосочетании выясняем роль
+                n_gramm_new.append(n_gramm[i].dep_) # записываем ее в список для словосочетания
+            result_new.append(n_gramm_new) # и потом этот список заносим в большой список результатов
     return result_new
 
 
@@ -75,53 +93,67 @@ def get_role(result, n):
 # "имя фамилия" -> "[имя фамилия]" - как одна сущности, например, "Виктория Терещенко" -> [Виктория Терещенко]
 # а не "фамилия имя" -> "[фамилия], [имя]" - как две сущности, например, "Терещенко Виктория" -> [Терещенко, Виктория]
 def get_ents(doc):
-    ents_res = list(ent for ent in doc.ents)
+    ents_res = list(ent for ent in doc.ents) # список, в который заносятся все найденные в исходном тексте именные сущности
     return ents_res
 
 
 # Удаление именованных сущностей
 def remove_ents(document, result_tokenize):
-    for ent in document.ents:
-        for y in ent:
-            for n_gramm in result_tokenize:
-                for x in n_gramm:
-                    if str(y) == str(x):
-                        result_tokenize.remove(n_gramm)
-    return result_tokenize
+    for ent in document.ents: # для каждой именной сущности
+        for y in ent: # и для каждого слова в имееной сущности (если это словосочетание)
+            for n_gramm in result_tokenize: # для каждого n-грамма в списке токенизации
+                for x in n_gramm: # и для каждого слова в n-грамме (если это словосочетание)
+                    if str(y) == str(x): # сравниваются каждая часть именованной сущности с каждой частью n-грамма, ищутся одинаковые
+                        result_tokenize.remove(n_gramm) # и удаляются
+                                                        # таким образом текст очищается от именных сущностей
+                        break
+    return result_tokenize # и на выходе остается очищенный текст
 
 
 # Поиск синонимов
 def get_synonymss(result, n):
-    rs = textacy.resources.ConceptNet()
-    # rs.download()
-    result_new = []
-    if n == 1:
-        for n_gramm in result:
-            syn = rs.get_synonyms(term=n_gramm.lemma_, lang="ru", sense="n")
-            result_new.append(syn)
-    else:
-        for n_gramm in result:
-            n_gramm_new = []
-            for i in range(len(n_gramm)):
+    rs = textacy.resources.ConceptNet()  # модуль textacy для поиска синонимов
+    # rs.download() # один раз запустить, чтобы загрузилась БЗ, потом закомментировать обратно
+    result_new = [] # список для записи результатов функции
+    if n == 1: # для униграмм (для n = 1)
+        for n_gramm in result: # для каждой униграммы в результате токенизации выясняем ее роль в предложении
+            syn = rs.get_synonyms(term=n_gramm.lemma_, lang="ru", sense="n") # получаем синонимы к униграмму
+            result_new.append(syn) # и записываем их в список результатов функции
+    else: # для остальных (для n = 2, 3 или 4)
+        for n_gramm in result: # для каждого n-грамма в результате токенизации
+            n_gramm_new = [] # создаем список синонимов для каждого словосочетания
+            for i in range(len(n_gramm)): # для каждого слова в n-грамме
                 syn = rs.get_synonyms(
-                    term=n_gramm[i].lemma_, lang="ru", sense="n")
-                n_gramm_new.append(syn)
-            result_new.append(n_gramm_new)
+                    term=n_gramm[i].lemma_, lang="ru", sense="n") # ищем синонимы
+                n_gramm_new.append(syn) # записываем их в список для словосочетания
+            result_new.append(n_gramm_new) # и потом этот список заносим в большой список результатов
     return result_new
 
 
 # Все вместе
 def print_all_together(doc, result_tok):
+    # печатаем шапку таблицы
     print(f"{'text':<16}{'lemma':<16}{'part of speach':<18}{'role':<10}{'dependent':<12}")
-    for token in doc:
-        for token_ in result_tok:
-            token_text = token.text
-            for x in token_:
+    # 1. для каждого слова из объекта doc 
+    for token in doc:  ### token - токен из объекта doc (то есть одно слово из исходного текста)
+        token_text = token.text # 2. присваиваем переменной token_text значение текстового написания токена из объекта doc 
+        # 3. для каждого n-грамма из списка декомпозиции
+        for token_ in result_tok:  ### token_ - токен (= n-грамм = словосочетание или слово) из декомпозированного doc (то есть из списка n-грамм - result_tok)
+            # 4. далее для каждого слова из n-грамма (из словосочетания)
+            for x in token_:  ### x - одно слово из n-грамма (из словосочетания)
+                # 5. сравниваем слово token с x
+                # делаем это для того, чтобы можно было вытащить всю остальную информацию для построения таблицы ниже
+                # так как элемент объекта doc (token) хранит эту информацию (они являются типами token или span), а элементы списка result_tok (token_) уже не хранят 
+                # (так как в функции лемматизации создается новый список из лемм, которые уже являются типом str)
+                
+                # 6. если текстовое значение token и x совпадают, то ищем оставшиеся параметры для таблицы
                 if token_text == x.text:
-                    token_pos = token.pos_
-                    token_dep = token.dep_
-                    token_head = token.head.text
-                    token_lemma = token.lemma_
+                    token_lemma = token.lemma_ # ищем лемму токена
+                    token_pos = token.pos_ # ищем часть речи токена
+                                        # здесь можно поставить вместо "token.pos_" - spacy.explain(token.pos_), чтобы части речи писались полным названием, а не аббревиатурой
+                    token_dep = token.dep_ # ищем роль токена в предложении
+                    token_head = token.head.text # ищем главное слово (слово, от которого токен зависит)
+                    # печатаем содержимое таблицы
                     print(
                         f"{token_text:<16}{token_lemma:<16}{token_pos:<18}"
                         f"{token_dep:<10}{token_head:<12}"
